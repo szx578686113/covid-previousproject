@@ -1,25 +1,24 @@
 import datetime
 nowTime = datetime.datetime.now()
-filepath = "../timestamp.txt"
-def getTimestamp():
+
+def getTimestamp(filepath):
     try:
         fp = open(filepath, "r")
         content = fp.read()
-        content = content.split(' ')
-        if fp == '':
-            fp.close()
-            setTimestamp(0)
-            return 0
         fp.close()
+        if content == '':
+            setTimestamp(filepath, 0)
+            return 0
+        content = content.split(' ')
         return int(content[0])
 
     except IOError:
         fp = open(filepath, "w")
         fp.write("0 {}".format(nowTime))
-        return 0
         fp.close()
+        return 0
 
-def setTimestamp(x):
+def setTimestamp(filepath, x):
     fp = open(filepath, "w")
     fp.write("{} {}".format(x,nowTime))
     fp.close()

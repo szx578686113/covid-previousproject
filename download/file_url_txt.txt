@@ -1,0 +1,7 @@
+https://covid.ourworldindata.org/data/owid-covid-data.csv
+https://data.cdc.gov/resource/9bhg-hcku.csv
+https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv
+https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/ecdc/new_cases.csv
+https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/ecdc/new_deaths.csv
+https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/ecdc/total_cases.csv
+https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/ecdc/total_deaths.csv

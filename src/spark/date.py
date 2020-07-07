@@ -14,10 +14,10 @@ spark = SparkSession \
 
 tablename = ["total_cases","total_deaths","new_cases","new_deaths"]
 
-filepath = [r"../../../data/total_cases.csv",
-            r"../../../data/total_deaths.csv",
-            r"../../../data/new_cases.csv",
-            r"../../../data/new_deaths.csv"]
+filepath = [r"../../data/total_cases.csv",
+            r"../../data/total_deaths.csv",
+            r"../../data/new_cases.csv",
+            r"../../data/new_deaths.csv"]
 
 conn_param = {}
 conn_param["user"] = Mysql_User
@@ -29,7 +29,7 @@ conn_param["driver"] = Mysql_Driver
 def dateProcess(id):
     df = spark.read.format("csv").load(filepath[id], header=True, inferSchema="true")
     df.registerTempTable("info")
-    df = spark.sql("select date, world from info where date > '2020-01-17 00:00:00' ")
+    df = spark.sql("select date, world as " + tablename[id] + " from info where date > '2020-01-17 00:00:00' ")
     df.show()
     df.write.jdbc(Mysql_Conn, tablename[id], "overwrite", conn_param)
 

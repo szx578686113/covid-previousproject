@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-#
-from config import *
+from MysqlConfig import *
 from pyspark import Row
 from pyspark.sql import SparkSession
 import os
@@ -10,7 +10,7 @@ spark=SparkSession\
     .config("spark.some.config.option","some-value")\
     .getOrCreate()
 
-df = spark.read.format("csv").load("../../../data/9bhg-hcku.csv",header=True, inferSchema="true")
+df = spark.read.format("csv").load("../../data/9bhg-hcku.csv",header=True, inferSchema="true")
 df.createGlobalTempView("city")
 
 sex_df=spark.sql("select Sex,`covid_19_deaths` from global_temp.city where state like 'United%' and `age_group` like 'All%'"

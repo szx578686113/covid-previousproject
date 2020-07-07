@@ -13,7 +13,7 @@ spark = SparkSession \
     .config("spark.some.config.option", "some-value") \
     .getOrCreate()
 
-filepath = "../../../data/time_series_covid19_recovered_global.csv"
+filepath = "../../data/time_series_covid19_recovered_global.csv"
 filename = "recovery.csv"
 
 data = []

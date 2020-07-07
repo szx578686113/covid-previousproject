@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-#
-from config import *
+from MysqlConfig import *
 from pyspark import Row
 from pyspark.sql import SparkSession
 import os
@@ -10,7 +10,7 @@ spark=SparkSession\
     .config("spark.some.config.option","some-value")\
     .getOrCreate()
 
-df = spark.read.format("csv").option("header",True).load(r"../../../data/owid-covid-data.csv")
+df = spark.read.format("csv").option("header",True).load(r"../../data/owid-covid-data.csv")
 df.createGlobalTempView("city")
 
 new_df=spark.sql("select location country,sum(new_cases_per_million) total_per_million from global_temp.city where location is not null "

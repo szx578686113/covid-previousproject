@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-#
-from config import *
+from MysqlConfig import *
 from pyspark import Row
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import udf
@@ -13,7 +13,7 @@ spark=SparkSession\
     .config("spark.some.config.option","some-value")\
     .getOrCreate()
 
-df = spark.read.format("csv").load("../../../data/9bhg-hcku.csv",header=True, inferSchema="true")
+df = spark.read.format("csv").load("../../data/9bhg-hcku.csv",header=True, inferSchema="true")
 
 def age_process(value):
     if value =='Under 1 year' :

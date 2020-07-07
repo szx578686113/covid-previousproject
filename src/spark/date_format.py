@@ -2,15 +2,13 @@ import pymysql
 from src.timestamp import getTimestamp
 from src.timestamp import setTimestamp
 
-timestampPath = "../../../timestamp.txt"
+timestampPath = "../../timestamp.txt"
 
 tablename = ["total_cases","total_deaths","new_cases","new_deaths"]
 conn = pymysql.connect('localhost', user="root", passwd="", db="covid")
 cursor = conn.cursor()
 
 def dateFormat(id):
-    if getTimestamp(timestampPath) <= 3:
-        cursor.execute(" alter table " + tablename[id] + " change world " + tablename[id]+" int(10) ")
     cursor.execute(" alter table " + tablename[id] + " modify date varchar(30) ")
     print(cursor.execute(" update " + tablename[id] + " set date = replace(date, '2020-','')"))
     print(cursor.execute(" update " + tablename[id] + " set date = replace(date, '-','/')"))
@@ -19,10 +17,7 @@ def dateFormat(id):
 for i in range(4):
     dateFormat(i)
 
-if getTimestamp(timestampPath) > 3:
-    cursor.execute("drop view datedata")
-
-cursor.execute("create view datedata\
+cursor.execute("create or replace view datedata\
                 as select total_cases.date, total_cases, new_cases, total_deaths, new_deaths, total_recovery\
                 from total_cases, new_cases, total_deaths, new_deaths, total_recovery\
                 where total_cases.date=total_deaths.date and total_cases.date=new_cases.date and\

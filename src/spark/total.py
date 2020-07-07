@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-#
-from config import *
+from MysqlConfig import *
 from pyspark import Row
 from pyspark.sql import SparkSession
 import os
@@ -12,7 +12,7 @@ spark=SparkSession\
 
 sc=spark.sparkContext
 
-filePath=r"../../../data/owid-covid-data.csv"
+filePath=r"../../data/owid-covid-data.csv"
 textFile=sc.textFile(filePath)
 
 

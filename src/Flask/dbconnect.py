@@ -6,7 +6,7 @@ def get_conn():
     # 创建连接
     conn = pymysql.connect(host="127.0.0.1",
                            user="root",
-                           password="Keven123456",
+                           password="",
                            db="covid",
                            charset="utf8mb4")
     # 创建游标

@@ -32,7 +32,7 @@ def query(sql,*args):
     return res
 
 def get_map():
-    sql = "SELECT t.* FROM covid_test.total t WHERE total IS NOT NULL" \
+    sql = "SELECT t.* FROM covid.total t WHERE total IS NOT NULL" \
           " ORDER BY country"
     res = query(sql)
     ori_data = list(res)
@@ -67,33 +67,33 @@ def get_map():
     return modified_data
 
 def get_top10():
-    sql = "SELECT t.* FROM covid_test.top10 t " \
+    sql = "SELECT t.* FROM covid.totalpermillion t " \
           "ORDER BY total_per_million DESC"
     res = query(sql)
     return res
 
 def get_gender():
-    sql = "SELECT t.* FROM covid_test.sex t"
+    sql = "SELECT t.* FROM covid.sex t"
     res = query(sql)
     return res
 
 def get_trend(column_name):
-    sql = "SELECT date,%s FROM covid_test.datedata t" %(column_name)
+    sql = "SELECT date,%s FROM covid.datedata t" %(column_name)
     res = query(sql)
     return res
 
 def get_continent():
-    sql = "SELECT t.* FROM covid_test.continent t"
+    sql = "SELECT t.* FROM covid.continent t"
     res = query(sql)
     return res
 
 def get_total():
-    sql = "SELECT date, total_cases, total_deaths FROM covid_test.datedata t"
+    sql = "SELECT date, total_cases, total_deaths FROM covid.datedata t"
     res = query(sql)
     return res
 
 def get_age():
-    sql = "SELECT t.* FROM covid_test.age t " \
+    sql = "SELECT t.* FROM covid.age t " \
           "ORDER BY id_num DESC"
     res = query(sql)
     return res

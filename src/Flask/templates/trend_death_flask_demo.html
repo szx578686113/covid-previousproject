@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+      <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Merriweather+Sans">
+    <style>
+      body { font-family: 'Merriweather Sans'; }
+    </style>
+ <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript">
+    google.charts.load('current', {packages: ['corechart', 'bar']});
+    google.charts.setOnLoadCallback(drawBasic);
+
+function drawBasic() {
+
+    var data = google.visualization.arrayToDataTable([
+        ['Date', 'Deaths'],
+        {%- for row in trend_data -%}
+            {%- autoescape false %}
+                {{ '["{g}", {v}],'.format(g = row[0], v = row[1]) }}
+            {%- endautoescape %}
+        {%- endfor %}
+    ]);
+
+      var options = {
+        title: 'Number of New Deaths',
+        fontName: 'Merriweather Sans',
+        legend: 'none'
+        //bar: {groupWidth: "80%"}
+
+      };
+
+      var chart = new google.visualization.ColumnChart(
+        document.getElementById('chart_div'));
+
+      chart.draw(data, options);
+    }
+  </script>
+<div id="chart_div" style="width: 1280px; height: 400px;"></div>
+</head>
+<body>
+
+</body>
+</html>

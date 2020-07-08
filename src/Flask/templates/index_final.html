@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>COVID-19 Dashboard</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Merriweather+Sans">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <style media="screen" type="text/css">
+        body {
+            margin: 0;
+            color: #495057;
+            text-align: left;
+            background-color: #f7f7fc;
+            font-family: 'Merriweather Sans';
+        }
+
+        .header {
+            background-image: linear-gradient(lightblue, #f1f1f1, #f1f1f1, #f1f1f1, white);
+            padding: 10px;
+            font-size: 40px;
+        {#position: relative;#} width: 100%;
+            height: 50px;
+            text-align: center;
+            z-index: 9999;
+        }
+
+        .box {
+            background-color: white;
+            display: flex;
+            margin: 15px;
+            padding: 1.25rem;
+            box-shadow: 0 0 10px lightblue;
+        }
+
+        #main {
+            position: relative;
+            display: flex;
+            display: -webkit-flex;
+            justify-content: center;
+        {#top: 100px;#} margin: 20px;
+        {#left: 5%;#}{#height: 90%;#}{#width: 94%;#}
+        }
+
+        .grid {
+            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(15, auto);
+            grid-template-rows: repeat(12, auto);
+            grid-column-gap: 40px;
+            grid-row-gap: 30px;
+        }
+
+        .item {
+            box-shadow: 0 0 10px lightblue;
+        }
+
+        #c1 {
+        {#position: absolute;#} width: 75%;
+            height: 90%;
+        {#top: 5%;#}
+        }
+
+        #c2 {
+        {#position: absolute;#} display: flex;
+            flex-direction: column;
+            margin: auto;
+        {#确保数字模块和地图模块中线对齐#} width: 20%;
+            height: 80%;
+        }
+
+        .num {
+            width: 100%;
+            float: left;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: deepskyblue;
+            font-size: 12px;
+        }
+
+        .txt {
+            width: 100%;
+            float: left;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            color: black;
+        }
+
+        .item1 .item2 .item3 {
+            grid-column: 1 / 13;
+        }
+
+        .item1 {
+            grid-row: 1 / 5;
+        }
+
+        .item2 {
+            grid-row: 5 / 9;
+        }
+
+        .item3 {
+            grid-row: 9 / 13;
+        }
+
+        .item4 .item5 .item6 .item7 {
+            grid-column: 13 / 16;
+        }
+
+        .item4 {
+            grid-row: 1 / 4;
+        }
+
+        .item5 {
+            grid-row: 4 / 7;
+        }
+
+        .item6 {
+            grid-row: 7 / 10;
+        }
+
+        .item7 {
+            grid-row: 10 / 13;
+        }
+
+        .left {
+            width: 980px;
+            height: 600px;
+        }
+
+        .right {
+            width: 600px;
+            height: 450px;
+        }
+        .google-visualization-tooltip { pointer-events: none } {#避免图表中指针下的数据显示窗口闪烁#}
+    </style>
+</head>
+<body>
+<div id="title" class="header">Coronavirus Dashboard (外观细节待优化)</div>
+
+<div id="main">
+    <div class="box" id="c1">
+        <script type="text/javascript">
+            google.charts.load('current', {
+                'packages': ['geochart'],
+                // Note: you will need to get a mapsApiKey for your project.
+                // See: https://developers.google.com/chart/interactive/docs/basic_load_libs#load-settings
+                // 先用着这个官方的Demo API Key看看
+                // 这个Demo Key不能使用Geocoding，即只能用ISO代码或（它认可的）正规全称缩写表示国家/地区
+                'mapsApiKey': 'AIzaSyD-9tSrke72PouQMnMX-a7eZSW0jkFMBWY'
+            });
+            google.charts.setOnLoadCallback(drawRegionsMap);
+
+            function drawRegionsMap() {
+                var data = google.visualization.arrayToDataTable([
+                    ['Country', 'Confirmed Cases'],
+                    {%- for row in map_data -%}
+                    {%- autoescape false %}
+                    {{ '[{c}, {d}],'.format(c = row[0], d = row[1])}}
+                    {%- endautoescape %}
+                    {%- endfor %}
+                ]);
+
+                var options = {
+                    colorAxis: {minValue: 0, maxValue: 300000, colors: ['#d1eeff', '#017092']},
+                    fontName: 'Merriweather Sans',
+                    legend: 'none'
+                };
+
+                var chart = new google.visualization.GeoChart(document.getElementById('c1'));
+
+                chart.draw(data, options);
+            }
+        </script>
+    </div>
+    <div id="c2">
+        <div class="box" style="display: block">
+            <div class="txt"><h2>累计确诊</h2></div>
+            <div class="num"><h1>9999</h1></div>
+        </div>
+        <div class="box" style="display: block">
+            <div class="txt"><h2>剩余疑似</h2></div>
+            <div class="num"><h1>8888</h1></div>
+        </div>
+        <div class="box" style="display: block">
+            <div class="txt"><h2>累计治愈</h2></div>
+            <div class="num"><h1>7777</h1></div>
+        </div>
+        <div class="box" style="display: block">
+            <div class="txt"><h2>累计死亡</h2></div>
+            <div class="num"><h1>6666</h1></div>
+        </div>
+    </div>
+</div>
+
+
+<div class="grid">
+    <div class="left item item1" id="total">
+        <script type="text/javascript">
+            google.charts.load('current', {packages: ['corechart', 'line']});
+            google.charts.setOnLoadCallback(drawCurveTypes);
+
+            function drawCurveTypes() {
+
+                var data = google.visualization.arrayToDataTable([
+                    ['Date', 'Confirmed', 'Deaths'],
+                    {%- for row in total_data -%}
+                    {%- autoescape false %}
+                    {{ '["{a}", {b}, {c}],'.format(a = row[0], b = row[1], c = row[2]) }}
+                    {%- endautoescape %}
+                    {%- endfor %}
+                ]);
+
+                var options = {
+                    title: '标题还没想好',
+                    fontName: 'Merriweather Sans',
+                    legend: {
+                        position: 'bottom'
+                    },
+
+                };
+
+                var chart = new google.visualization.LineChart(
+                    document.getElementById('total'));
+
+                chart.draw(data, options);
+            }
+        </script>
+    </div>
+    <div class="left item item2" id="death">
+        <script type="text/javascript">
+            google.charts.load('current', {packages: ['corechart', 'bar']});
+            google.charts.setOnLoadCallback(drawBasic);
+
+            function drawBasic() {
+
+                var data = google.visualization.arrayToDataTable([
+                    ['Date', 'Deaths'],
+                    {%- for row in trend_deaths_data -%}
+                    {%- autoescape false %}
+                    {{ '["{g}", {v}],'.format(g = row[0], v = row[1]) }}
+                    {%- endautoescape %}
+                    {%- endfor %}
+                ]);
+
+                var options = {
+                    title: 'Number of New Deaths',
+                    fontName: 'Merriweather Sans',
+                    legend: 'none'
+                    //bar: {groupWidth: "80%"}
+
+                };
+
+                var chart = new google.visualization.ColumnChart(
+                    document.getElementById('death'));
+
+                chart.draw(data, options);
+            }
+        </script>
+    </div>
+    <div class="left item item3" id="conf">
+        <script type="text/javascript">
+            google.charts.load('current', {packages: ['corechart', 'bar']});
+            google.charts.setOnLoadCallback(drawBasic);
+
+            function drawBasic() {
+
+                var data = google.visualization.arrayToDataTable([
+                    ['Date', 'Confirmed Cases'],
+                    {%- for row in trend_conf_data -%}
+                    {%- autoescape false %}
+                    {{ '["{g}", {v}],'.format(g = row[0], v = row[1]) }}
+                    {%- endautoescape %}
+                    {%- endfor %}
+                ]);
+
+                var options = {
+                    title: 'Number of New Cases',
+                    fontName: 'Merriweather Sans',
+                    legend: 'none'
+                    //bar: {groupWidth: "80%"}
+
+                };
+
+                var chart = new google.visualization.ColumnChart(
+                    document.getElementById('conf'));
+
+                chart.draw(data, options);
+            }
+        </script>
+    </div>
+    <div class="right item item6" id="top">
+        <script type="text/javascript">
+
+            // Documentation:
+            // https://developers.google.com/chart/interactive/docs/gallery/barchart
+
+            google.charts.load('current', {packages: ['corechart', 'bar']});
+            google.charts.setOnLoadCallback(drawBasic);
+
+            function drawBasic() {
+
+                var data = google.visualization.arrayToDataTable([
+                    ['Country/Region', 'Confirmed Cases'],
+                    {%- for row in top10_data -%}
+                    {%- autoescape false %}
+                    {{ '["{c}", {d}],'.format(c = row[0], d = row[1]) }}
+                    {%- endautoescape %}
+                    {%- endfor %}
+                ]);
+
+                var dataOnBarView = new google.visualization.DataView(data);
+                dataOnBarView.setColumns([0, 1,
+                    {
+                        calc: "stringify",
+                        sourceColumn: 1,
+                        type: "string",
+                        role: "annotation"
+                    }]);
+
+
+                var options = {
+                    title: 'Confirmed Cases by Country/Region (per million)',
+                    fontName: 'Merriweather Sans',
+                    legend: 'none',
+                    chartArea: {width: '50%'},
+                    hAxis: {
+                        title: 'Confirmed Cases (per million people)',
+                        minValue: 0
+                    },
+                    vAxis: {
+                        title: 'Country/Region'
+                    }
+
+                };
+
+                var chart = new google.visualization.BarChart(document.getElementById("top"));
+
+                chart.draw(dataOnBarView, options);
+            }
+        </script>
+    </div>
+    <div class="right item item5" id="gender">
+        <script type="text/javascript">
+
+            // Documentation:
+            // https://developers.google.com/chart/interactive/docs/gallery/piechart
+
+            google.charts.load("current", {packages: ["corechart"]});
+            google.charts.setOnLoadCallback(drawCharts);
+
+            function drawCharts() {
+
+                var genderData = google.visualization.arrayToDataTable([
+                    ['Gender', 'Cases by Gender'],
+                    {%- for row in gender_data -%}
+                    {%- autoescape false %}
+                    {{ '["{g}", {v}],'.format(g = row[0], v = row[1]) }}
+                    {%- endautoescape %}
+                    {%- endfor %}
+                ]);
+
+                var genderOptions = {
+                    title: 'Gender Distribution of COVID-19 Infections in US',
+                    fontName: 'Merriweather Sans',
+                    pieHole: 0.5,
+                    colors: ['#64b5f6', '#f8bbd0'],
+                    legend: {
+                        position: 'bottom'
+                    },
+                    titleTextStyle: {
+                        fontSize: 20,
+                        bold: false
+                    },
+                    pieSliceTextStyle: {
+                        color: '#000',
+                        fontSize: 14
+                    },
+                    chartArea: {
+                        top: '12.5%',
+                        left: '12.5%',
+                        width: '75%',
+                        height: '75%'
+                    }
+                };
+
+                var genderChart = new google.visualization.PieChart(document.getElementById('gender'));
+                genderChart.draw(genderData, genderOptions);
+            }
+        </script>
+    </div>
+    <div class="right item item4" id="continent">
+        <script type="text/javascript">
+
+            // Documentation:
+            // https://developers.google.com/chart/interactive/docs/gallery/piechart
+
+            google.charts.load("current", {packages: ["corechart"]});
+            google.charts.setOnLoadCallback(drawCharts);
+
+            function drawCharts() {
+
+                var data = google.visualization.arrayToDataTable([
+                    ['Continent', 'Confirmed Cases'],
+                    {%- for row in continent_data -%}
+                    {%- autoescape false %}
+                    {{ '["{g}", {v}],'.format(g = row[0], v = row[1]) }}
+                    {%- endautoescape %}
+                    {%- endfor %}
+                ]);
+
+                var options = {
+                    title: 'COVID-19 Infections by Continent', //TODO:这名字随便取的要改
+                    pieHole: 0.5,
+                    fontName: 'Merriweather Sans',
+                    legend: {
+                        position: 'bottom'
+                    },
+                    titleTextStyle: {
+                        fontSize: 20,
+                        bold: false
+                    },
+                    pieSliceTextStyle: {
+                        color: '#000',
+                        fontSize: 14
+                    },
+                    chartArea: {
+                        top: '12.5%',
+                        left: '12.5%',
+                        width: '75%',
+                        height: '75%'
+                    }
+                };
+
+                var chart = new google.visualization.PieChart(document.getElementById('continent'));
+                chart.draw(data, options);
+            }
+        </script>
+    </div>
+    <div class="right item item7" id="age">
+        <script type="text/javascript">
+
+            // Documentation:
+            // https://developers.google.com/chart/interactive/docs/gallery/barchart
+
+            google.charts.load('current', {packages: ['corechart', 'bar']});
+            google.charts.setOnLoadCallback(drawBasic);
+
+            function drawBasic() {
+
+                var data = google.visualization.arrayToDataTable([
+                    ['Age Group', 'Total Deaths'],
+                    {%- for row in age_data -%}
+                    {%- autoescape false %}
+                    {{ '["{g}", {v}],'.format(g = row[0], v = row[1]) }}
+                    {%- endautoescape %}
+                    {%- endfor %}
+                ]);
+
+                //处理数据并计算百分比
+                var groupData = google.visualization.data.group(
+                    data,
+                    [{
+                        column: 0, modifier: function () {
+                            return 'total'
+                        }, type: 'string'
+                    }],
+                    [{column: 1, aggregation: google.visualization.data.sum, type: 'number'}]
+                );
+
+                var formatPercent = new google.visualization.NumberFormat({
+                    pattern: '#,##0.0%'
+                });
+
+                var formatShort = new google.visualization.NumberFormat({
+                    pattern: 'short'
+                });
+
+                var dataOnBarView = new google.visualization.DataView(data);
+                dataOnBarView.setColumns([0, 1,
+                    {
+                        calc: function (dt, row) {
+                            var amount = formatShort.formatValue(dt.getValue(row, 1));
+                            var percent = formatPercent.formatValue(dt.getValue(row, 1) / groupData.getValue(0, 1));
+                            return amount + ' (' + percent + ')';
+                        },
+                        sourceColumn: 1,
+                        type: "string",
+                        role: "annotation"
+                    }]);
+
+
+                var options = {
+                    title: 'Deaths by Age Group',
+                    fontName: 'Merriweather Sans',
+                    chartArea: {width: '50%'},
+                    hAxis: {
+                        title: 'Deaths',
+                        minValue: 0
+                    },
+                    vAxis: {
+                        title: 'Age Group'
+                    }
+
+                };
+
+                var chart = new google.visualization.BarChart(document.getElementById("age"));
+
+                chart.draw(dataOnBarView, options);
+            }
+        </script>
+    </div>
+</div>
+
+
+</body>
+</html>

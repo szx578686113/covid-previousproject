@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+      <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Merriweather+Sans">
+    <style>
+      body { font-family: 'Merriweather Sans'; }
+    </style>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+
+        // Documentation:
+        // https://developers.google.com/chart/interactive/docs/gallery/barchart
+
+        google.charts.load('current', {packages: ['corechart', 'bar']});
+        google.charts.setOnLoadCallback(drawBasic);
+
+        function drawBasic() {
+
+            var data = google.visualization.arrayToDataTable([
+                ['Age Group', 'Total Deaths'],
+                {%- for row in age_data -%}
+                    {%- autoescape false %}
+                        {{ '["{g}", {v}],'.format(g = row[0], v = row[1]) }}
+                    {%- endautoescape %}
+                {%- endfor %}
+            ]);
+
+            //处理数据并计算百分比
+            var groupData = google.visualization.data.group(
+                data,
+                [{column: 0, modifier: function () {return 'total'}, type: 'string'}],
+                [{column: 1, aggregation: google.visualization.data.sum, type: 'number'}]
+            );
+
+            var formatPercent = new google.visualization.NumberFormat({
+                pattern: '#,##0.0%'
+            });
+
+            var formatShort = new google.visualization.NumberFormat({
+                pattern: 'short'
+            });
+
+            var dataOnBarView = new google.visualization.DataView(data);
+            dataOnBarView.setColumns([0, 1,
+                {
+                    calc: function (dt, row) {
+                        var amount =  formatShort.formatValue(dt.getValue(row, 1));
+                        var percent = formatPercent.formatValue(dt.getValue(row, 1) / groupData.getValue(0, 1));
+                        return amount + ' (' + percent + ')';
+                        },
+                    sourceColumn: 1,
+                    type: "string",
+                    role: "annotation"
+                }]);
+
+
+            var options = {
+                title: 'Deaths by Age Group',
+                fontName: 'Merriweather Sans',
+                legend: 'none',
+                colors:['#525252'],
+                //chartArea: {width: '50%'},
+                hAxis: {
+                    title: 'Deaths',
+                    //minValue: 0
+                },
+                vAxis: {
+                    title: 'Age Group'
+                }
+
+            };
+
+            var chart = new google.visualization.BarChart(document.getElementById("chart_div"));
+
+            chart.draw(dataOnBarView, options);
+        }
+    </script>
+</head>
+<body>
+<div id="chart_div" style="width: 900px; height: 600px;"></div>
+</body>
+</html>

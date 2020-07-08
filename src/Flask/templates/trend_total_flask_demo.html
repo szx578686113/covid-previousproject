@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+      <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Merriweather+Sans">
+    <style>
+      body { font-family: 'Merriweather Sans'; }
+    </style>
+ <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript">
+    google.charts.load('current', {packages: ['corechart', 'line']});
+    google.charts.setOnLoadCallback(drawCurveTypes);
+
+function drawCurveTypes() {
+
+    var data = google.visualization.arrayToDataTable([
+        ['Date', 'Confirmed', 'Deaths'],
+        {%- for row in total_data -%}
+            {%- autoescape false %}
+                {{ '["{a}", {b}, {c}],'.format(a = row[0], b = row[1], c = row[2]) }}
+            {%- endautoescape %}
+        {%- endfor %}
+    ]);
+
+      var options = {
+        title: '标题还没想好',
+        fontName: 'Merriweather Sans',
+        legend: {
+                    position: 'bottom'
+                },
+
+      };
+
+      var chart = new google.visualization.LineChart(
+        document.getElementById('chart_div'));
+
+      chart.draw(data, options);
+    }
+  </script>
+<div id="chart_div" style="width: 1280px; height: 400px;"></div>
+</head>
+<body>
+
+</body>
+</html>

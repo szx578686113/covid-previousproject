@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Merriweather+Sans">
+    <style>
+      body { font-family: 'Merriweather Sans'; }
+    </style>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+      google.charts.load('current', {
+        'packages':['geochart'],
+        // Note: you will need to get a mapsApiKey for your project.
+        // See: https://developers.google.com/chart/interactive/docs/basic_load_libs#load-settings
+        // 先用着这个官方的Demo API Key看看
+        // 这个Demo Key不能使用Geocoding，即只能用ISO代码或（它认可的）正规全称缩写表示国家/地区
+        'mapsApiKey': 'AIzaSyD-9tSrke72PouQMnMX-a7eZSW0jkFMBWY'
+      });
+      google.charts.setOnLoadCallback(drawRegionsMap);
+
+      function drawRegionsMap() {
+        var data = google.visualization.arrayToDataTable([
+            ['Country', 'Confirmed Cases'],
+            {%- for row in map_data -%}
+            {%- autoescape false %}
+              {{ '[{c}, {d}],'.format(c = row[0], d = row[1])}}
+            {%- endautoescape %}
+          {%- endfor %}
+        ]);
+
+        var options = {
+            colorAxis:  {minValue: 0, maxValue:350000, colors: ['#c9f1e3', '#256e96']},
+            tooltip: { textStyle: {fontName: 'Merriweather Sans'}},
+            legend: 'none'
+        };
+
+        var chart = new google.visualization.GeoChart(document.getElementById('regions_div'));
+
+        chart.draw(data, options);
+      }
+    </script>
+  </head>
+  <body>
+    <div id="regions_div" style="width: 1280px; height: 800px;"></div>
+  </body>
+</html>

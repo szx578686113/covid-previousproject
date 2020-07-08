@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+      <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Merriweather+Sans">
+    <style>
+      body { font-family: 'Merriweather Sans'; }
+    </style>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+
+        // Documentation:
+        // https://developers.google.com/chart/interactive/docs/gallery/barchart
+
+        google.charts.load('current', {packages: ['corechart', 'bar']});
+        google.charts.setOnLoadCallback(drawBasic);
+
+        function drawBasic() {
+
+            var data = google.visualization.arrayToDataTable([
+                ['Country/Region', 'Confirmed Cases'],
+                {%- for row in top10_data -%}
+                    {%- autoescape false %}
+                        {{ '["{c}", {d}],'.format(c = row[0], d = row[1]) }}
+                    {%- endautoescape %}
+                {%- endfor %}
+            ]);
+
+            var dataOnBarView = new google.visualization.DataView(data);
+            dataOnBarView.setColumns([0, 1,
+                       { calc: "stringify",
+                         sourceColumn: 1,
+                         type: "string",
+                         role: "annotation" }]);
+
+
+            var options = {
+                title: 'Confirmed Cases by Country/Region (per million)',
+                fontName: 'Merriweather Sans',
+                legend: 'none',
+                //chartArea: {width: '50%'},
+                hAxis: {
+                    title: 'Confirmed Cases (per million people)',
+                    minValue: 0
+                },
+                vAxis: {
+                    title: 'Country/Region'
+                }
+
+            };
+
+            var chart = new google.visualization.BarChart(document.getElementById("chart_div"));
+
+            chart.draw(dataOnBarView, options);
+        }
+    </script>
+</head>
+<body>
+    <div id="chart_div" style="width: 900px; height: 600px;"></div>
+</body>
+</html>

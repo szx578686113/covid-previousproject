@@ -2,8 +2,6 @@ import pymysql
 from src.timestamp import getTimestamp
 from src.timestamp import setTimestamp
 
-timestampPath = "../../timestamp.txt"
-
 tablename = ["total_cases","total_deaths","new_cases","new_deaths"]
 conn = pymysql.connect('localhost', user="root", passwd="", db="covid")
 cursor = conn.cursor()

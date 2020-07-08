@@ -19,7 +19,7 @@ textFile=sc.textFile(filePath)
 def to_pair(item):
     tmp_list=item.split(",")
     if tmp_list[2]=='location':
-        return "Afghanistan",0
+        return "\"Afghanistan\"",0
     country="\"{}\"".format(tmp_list[2])
     if tmp_list[5]!='':
         new_cases_per_million=float(tmp_list[5])

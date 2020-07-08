@@ -22,3 +22,5 @@ def setTimestamp(filepath, x):
     fp = open(filepath, "w")
     fp.write("{} {}".format(x,nowTime))
     fp.close()
+
+setTimestamp("../timestamp.txt" ,getTimestamp("../timestamp.txt") + 1)

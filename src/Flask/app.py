@@ -10,8 +10,9 @@ gender_data = dbconnect.get_gender()
 continent_data = dbconnect.get_continent()
 total_data = dbconnect.get_total()
 age_data = dbconnect.get_age()
+numbers_data = dbconnect.get_numbers()
 
-@app.route('/separate')
+@app.route('/dev')
 def hello_world():
     show_string = "COVID-19 Dashboard <br/>" \
                   "图表细节待优化 <br/>" \
@@ -65,9 +66,10 @@ def show_index():
                            total_data=total_data,
                            continent_data=continent_data,
                            trend_deaths_data=dbconnect.get_trend('new_deaths'),
-                           trend_conf_data=dbconnect.get_trend('new_deaths'),
+                           trend_conf_data=dbconnect.get_trend('new_cases'),
                            gender_data=gender_data,
-                           top10_data=top10_data
+                           top10_data=top10_data,
+                           numbers_data=numbers_data
                            )
 
 if __name__ == '__main__':

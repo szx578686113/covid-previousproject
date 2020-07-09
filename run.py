@@ -1,9 +1,10 @@
 import os
-import time
-os.system("cd ./src/scrapy/hjx && python download.py")
+
+os.system("python ./src/timestamp.py")
+
+os.system("cd ./src/scrapy && python download.py")
 
 os.system("cd ./src/spark && python run.py")
 
+os.system("cd ./src/flask && python app.py")
 
-
-os.system("cd ./src && python timestamp.py")

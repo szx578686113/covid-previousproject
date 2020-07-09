@@ -15,8 +15,9 @@
         }
 
         .header {
-            background-image: linear-gradient(lightblue, #f1f1f1, #f1f1f1, #f1f1f1, white);
-            padding: 10px;
+            background-image: linear-gradient(lightblue, #f0f0f0, #f5f5f5, #fafafa, white);
+            padding-top: 10px;
+            padding-bottom: 10px; /*左右不能有padding否则会导致页面超过屏幕宽度*/
             font-size: 40px;
             width: 100%;
             height: 50px;
@@ -62,7 +63,7 @@
             display: flex;
             flex-direction: column;
             margin: auto; /*确保数字模块和地图模块中线对齐*/
-             width: 20%;
+            width: 20%;
             height: 80%;
         }
 
@@ -72,8 +73,11 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            color: deepskyblue;
-            font-size: 12px;
+            margin-top: -5px;
+            margin-bottom: -10px;
+            margin-left: -5px;
+            margin-right: -5px;
+            font-size: 20px;
         }
 
         .txt {
@@ -82,7 +86,11 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 16px;
+            margin-top: -5px;
+            margin-bottom: -10px;
+            margin-left: -5px;
+            margin-right: -5px;
+            font-size: 15px;
             color: black;
         }
 
@@ -129,13 +137,20 @@
 
         .right {
             width: 600px;
-            height: 450px;
+            height: 443px;
         }
+
+        #footnote {
+            display: flex;
+            margin: 10px;
+            padding: 1rem;
+        }
+
         .google-visualization-tooltip { pointer-events: none } /*避免图表中指针下的数据显示窗口闪烁*/
     </style>
 </head>
 <body>
-<div id="title" class="header">Coronavirus Dashboard</div>
+<div id="title" class="header">Coronavirus Disease (COVID-19) Dashboard</div>
 
 <div id="main">
     <div class="box" id="c1">
@@ -161,8 +176,8 @@
                 ]);
 
                 var options = {
-                    colorAxis: {minValue: 0, maxValue: 300000, colors: ['#d1eeff', '#017092']},
-                    fontName: 'Merriweather Sans',
+                    colorAxis: {minValue: 0, maxValue: 300000, colors: ['#b6d6fc', '#1658ac']},
+                    tooltip: { textStyle: {fontName: 'Merriweather Sans'}},
                     legend: 'none'
                 };
 
@@ -174,20 +189,44 @@
     </div>
     <div id="c2">
         <div class="box" style="display: block">
-            <div class="txt"><h2>累计确诊</h2></div>
-            <div class="num"><h1>9999</h1></div>
+            <div class="txt"><h2>Total Infections</h2></div>
+            <div class="num" style="color: crimson"><h1>
+                {%- for row in numbers_data -%}
+                    {%- autoescape false %}
+                        {{ '{v}'.format(v = row[1]) }}
+                    {%- endautoescape %}
+                {%- endfor %}
+            </h1></div>
         </div>
         <div class="box" style="display: block">
-            <div class="txt"><h2>剩余疑似</h2></div>
-            <div class="num"><h1>8888</h1></div>
+            <div class="txt"><h2>New Infections</h2></div>
+            <div class="num" style="color: darkorange"><h1>
+                {%- for row in numbers_data -%}
+                    {%- autoescape false %}
+                        {{ '{v}'.format(v = row[2]) }}
+                    {%- endautoescape %}
+                {%- endfor %}
+            </h1></div>
         </div>
         <div class="box" style="display: block">
-            <div class="txt"><h2>累计治愈</h2></div>
-            <div class="num"><h1>7777</h1></div>
+            <div class="txt"><h2>Total Recovered</h2></div>
+            <div class="num" style="color: green"><h1>
+                {%- for row in numbers_data -%}
+                    {%- autoescape false %}
+                        {{ '{v}'.format(v = row[5]) }}
+                    {%- endautoescape %}
+                {%- endfor %}
+            </h1></div>
         </div>
         <div class="box" style="display: block">
-            <div class="txt"><h2>累计死亡</h2></div>
-            <div class="num"><h1>6666</h1></div>
+            <div class="txt"><h2>Total Deaths</h2></div>
+            <div class="num"><h1>
+                {%- for row in numbers_data -%}
+                    {%- autoescape false %}
+                        {{ '{v}'.format(v = row[3]) }}
+                    {%- endautoescape %}
+                {%- endfor %}
+            </h1></div>
         </div>
     </div>
 </div>
@@ -202,21 +241,32 @@
             function drawCurveTypes() {
 
                 var data = google.visualization.arrayToDataTable([
-                    ['Date', 'Confirmed', 'Deaths'],
+                    ['Date', 'Confirmed', 'Deaths', 'Recovered'],
                     {%- for row in total_data -%}
                     {%- autoescape false %}
-                    {{ '["{a}", {b}, {c}],'.format(a = row[0], b = row[1], c = row[2]) }}
+                    {{ '["{a}", {b}, {c}, {d}],'.format(a = row[0], b = row[1], c = row[2], d = row[3]) }}
                     {%- endautoescape %}
                     {%- endfor %}
                 ]);
 
                 var options = {
-                    title: 'Total Trend',
+                    title: 'Total confirmed, deaths and recovered COVID-19 cases',
                     fontName: 'Merriweather Sans',
+                    colors: ['crimson', '#495057', 'green'],
                     legend: {
                         position: 'bottom'
                     },
-
+                    lineWidth: 5,
+                    chartArea: {
+                        top: '13%',
+                        left: '14%',
+                        right: '6%',
+                        width: '70%',
+                        height: '70%'
+                    },
+                    titleTextStyle: {
+                        fontSize: 18,
+                    },
                 };
 
                 var chart = new google.visualization.LineChart(
@@ -226,38 +276,7 @@
             }
         </script>
     </div>
-    <div class="left item item2" id="death">
-        <script type="text/javascript">
-            google.charts.load('current', {packages: ['corechart', 'bar']});
-            google.charts.setOnLoadCallback(drawBasic);
-
-            function drawBasic() {
-
-                var data = google.visualization.arrayToDataTable([
-                    ['Date', 'Deaths'],
-                    {%- for row in trend_deaths_data -%}
-                    {%- autoescape false %}
-                    {{ '["{g}", {v}],'.format(g = row[0], v = row[1]) }}
-                    {%- endautoescape %}
-                    {%- endfor %}
-                ]);
-
-                var options = {
-                    title: 'Number of New Deaths',
-                    fontName: 'Merriweather Sans',
-                    legend: 'none'
-                    //bar: {groupWidth: "80%"}
-
-                };
-
-                var chart = new google.visualization.ColumnChart(
-                    document.getElementById('death'));
-
-                chart.draw(data, options);
-            }
-        </script>
-    </div>
-    <div class="left item item3" id="conf">
+    <div class="left item item2" id="conf">
         <script type="text/javascript">
             google.charts.load('current', {packages: ['corechart', 'bar']});
             google.charts.setOnLoadCallback(drawBasic);
@@ -274,10 +293,21 @@
                 ]);
 
                 var options = {
-                    title: 'Number of New Cases',
+                    title: 'Daily Confirmed COVID-19 Cases',
                     fontName: 'Merriweather Sans',
-                    legend: 'none'
-                    //bar: {groupWidth: "80%"}
+                    legend: 'none',
+                    chartArea: {
+                        top: '14%',
+                        left: '12%',
+                        right: '5%',
+                        width: '70%',
+                        height: '70%'
+                    },
+                    colors:['crimson'],
+                    titleTextStyle: {
+                        fontSize: 18,
+                    },
+                    bar: {groupWidth: "80%"}
 
                 };
 
@@ -288,103 +318,45 @@
             }
         </script>
     </div>
-    <div class="right item item6" id="top">
+    <div class="left item item3" id="death">
         <script type="text/javascript">
-
-            // Documentation:
-            // https://developers.google.com/chart/interactive/docs/gallery/barchart
-
             google.charts.load('current', {packages: ['corechart', 'bar']});
             google.charts.setOnLoadCallback(drawBasic);
 
             function drawBasic() {
 
                 var data = google.visualization.arrayToDataTable([
-                    ['Country/Region', 'Confirmed Cases'],
-                    {%- for row in top10_data -%}
-                    {%- autoescape false %}
-                    {{ '["{c}", {d}],'.format(c = row[0], d = row[1]) }}
-                    {%- endautoescape %}
-                    {%- endfor %}
-                ]);
-
-                var dataOnBarView = new google.visualization.DataView(data);
-                dataOnBarView.setColumns([0, 1,
-                    {
-                        calc: "stringify",
-                        sourceColumn: 1,
-                        type: "string",
-                        role: "annotation"
-                    }]);
-
-
-                var options = {
-                    title: 'Confirmed Cases by Country/Region (per million)',
-                    fontName: 'Merriweather Sans',
-                    legend: 'none',
-                    chartArea: {width: '50%'},
-                    hAxis: {
-                        title: 'Confirmed Cases (per million people)',
-                        minValue: 0
-                    },
-                    vAxis: {
-                        title: 'Country/Region'
-                    }
-
-                };
-
-                var chart = new google.visualization.BarChart(document.getElementById("top"));
-
-                chart.draw(dataOnBarView, options);
-            }
-        </script>
-    </div>
-    <div class="right item item5" id="gender">
-        <script type="text/javascript">
-
-            // Documentation:
-            // https://developers.google.com/chart/interactive/docs/gallery/piechart
-
-            google.charts.load("current", {packages: ["corechart"]});
-            google.charts.setOnLoadCallback(drawCharts);
-
-            function drawCharts() {
-
-                var genderData = google.visualization.arrayToDataTable([
-                    ['Gender', 'Cases by Gender'],
-                    {%- for row in gender_data -%}
+                    ['Date', 'Deaths'],
+                    {%- for row in trend_deaths_data -%}
                     {%- autoescape false %}
                     {{ '["{g}", {v}],'.format(g = row[0], v = row[1]) }}
                     {%- endautoescape %}
                     {%- endfor %}
                 ]);
 
-                var genderOptions = {
-                    title: 'Gender Distribution of COVID-19 Infections in US',
+                var options = {
+                    title: 'Daily Confirmed COVID-19 Deaths',
                     fontName: 'Merriweather Sans',
-                    pieHole: 0.5,
-                    colors: ['#64b5f6', '#f8bbd0'],
-                    legend: {
-                        position: 'bottom'
-                    },
-                    titleTextStyle: {
-                        fontSize: 20,
-                        bold: false
-                    },
-                    pieSliceTextStyle: {
-                        color: '#000',
-                        fontSize: 14
-                    },
+                    legend: 'none',
                     chartArea: {
-                        top: '12.5%',
-                        left: '12.5%',
-                        width: '75%',
-                        height: '75%'
-                    }
+                        top: '14%',
+                        left: '12%',
+                        right: '5%',
+                        width: '70%',
+                        height: '70%'
+                    },
+                    colors:['#495057'],
+                    titleTextStyle: {
+                        fontSize: 18,
+                    },
+                    bar: {groupWidth: "80%"}
+
                 };
 
-                var genderChart = new google.visualization.PieChart(document.getElementById('gender'));
-                genderChart.draw(genderData, genderOptions);
+                var chart = new google.visualization.ColumnChart(
+                    document.getElementById('death'));
+
+                chart.draw(data, options);
             }
         </script>
     </div>
@@ -416,8 +388,7 @@
                         position: 'bottom'
                     },
                     titleTextStyle: {
-                        fontSize: 20,
-                        bold: false
+                        fontSize: 18,
                     },
                     pieSliceTextStyle: {
                         color: '#000',
@@ -433,6 +404,107 @@
 
                 var chart = new google.visualization.PieChart(document.getElementById('continent'));
                 chart.draw(data, options);
+            }
+        </script>
+    </div>
+    <div class="right item item5" id="gender">
+        <script type="text/javascript">
+
+            // Documentation:
+            // https://developers.google.com/chart/interactive/docs/gallery/piechart
+
+            google.charts.load("current", {packages: ["corechart"]});
+            google.charts.setOnLoadCallback(drawCharts);
+
+            function drawCharts() {
+
+                var genderData = google.visualization.arrayToDataTable([
+                    ['Gender', 'Cases by Gender'],
+                    {%- for row in gender_data -%}
+                    {%- autoescape false %}
+                    {{ '["{g}", {v}],'.format(g = row[0], v = row[1]) }}
+                    {%- endautoescape %}
+                    {%- endfor %}
+                ]);
+
+                var genderOptions = {
+                    title: 'COVID-19 Infections by Gender in US',
+                    fontName: 'Merriweather Sans',
+                    pieHole: 0.5,
+                    colors: ['#64b5f6', '#f8bbd0'],
+                    legend: {
+                        position: 'bottom'
+                    },
+                    titleTextStyle: {
+                        fontSize: 18,
+                    },
+                    pieSliceTextStyle: {
+                        color: '#000',
+                        fontSize: 14
+                    },
+                    chartArea: {
+                        top: '12.5%',
+                        left: '12.5%',
+                        width: '75%',
+                        height: '75%'
+                    }
+                };
+
+                var genderChart = new google.visualization.PieChart(document.getElementById('gender'));
+                genderChart.draw(genderData, genderOptions);
+            }
+        </script>
+    </div>
+    <div class="right item item6" id="top">
+        <script type="text/javascript">
+
+            // Documentation:
+            // https://developers.google.com/chart/interactive/docs/gallery/barchart
+
+            google.charts.load('current', {packages: ['corechart', 'bar']});
+            google.charts.setOnLoadCallback(drawBasic);
+
+            function drawBasic() {
+
+                var data = google.visualization.arrayToDataTable([
+                    ['Country/Region', 'Confirmed Cases (per million)'],
+                    {%- for row in top10_data -%}
+                    {%- autoescape false %}
+                    {{ '["{c}", {d}],'.format(c = row[0], d = row[1]) }}
+                    {%- endautoescape %}
+                    {%- endfor %}
+                ]);
+
+                var dataOnBarView = new google.visualization.DataView(data);
+                dataOnBarView.setColumns([0, 1,
+                    {
+                        calc: "stringify",
+                        sourceColumn: 1,
+                        type: "string",
+                        role: "annotation"
+                    }]);
+
+
+                var options = {
+                    title: 'Confirmed COVID-19 Cases Per Million',
+                    fontName: 'Merriweather Sans',
+                    legend: 'none',
+                    chartArea: {
+                        top: '15%',
+                        left: '15%',
+                        right: '15%',
+                        width: '75%',
+                        height: '75%'
+                    },
+                    titleTextStyle: {
+                        fontSize: 18,
+                    },
+
+                };
+
+                var chart = new google.visualization.BarChart(document.getElementById("top"));
+
+                chart.draw(dataOnBarView, options);
             }
         </script>
     </div>
@@ -490,16 +562,20 @@
 
 
                 var options = {
-                    title: 'Deaths by Age Group',
+                    title: 'COVID-19 Deaths by Age Group in US',
                     fontName: 'Merriweather Sans',
-                    chartArea: {width: '50%'},
-                    hAxis: {
-                        title: 'Deaths',
-                        minValue: 0
+                    legend: 'none',
+                    colors:['#ce760b'],
+                    chartArea: {
+                        top: '15%',
+                        left: '15%',
+                        right: '15%',
+                        width: '75%',
+                        height: '75%'
                     },
-                    vAxis: {
-                        title: 'Age Group'
-                    }
+                    titleTextStyle: {
+                        fontSize: 18,
+                    },
 
                 };
 
@@ -511,6 +587,16 @@
     </div>
 </div>
 
+<div id="footnote">
+    Source:&nbsp;
+    <a href='https://github.com/CSSEGISandData/COVID-19'>Johns Hopkins University</a>
+    ,&nbsp;
+    <a href='https://github.com/owid/covid-19-data/tree/master/public/data#our-data-sources'>Our World In Data</a>
+    ,&nbsp;
+    <a href='https://www.cdc.gov/nchs/nvss/vsrr/covid_weekly/'>National Center for Health Statistics</a>
+
+
+</div>
 
 </body>
 </html>

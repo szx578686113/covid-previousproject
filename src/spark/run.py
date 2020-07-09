@@ -1,9 +1,6 @@
 import os
 os.system("python total.py")
-os.system("python totalpermillion.py")
-os.system("python sex.py")
-os.system("python age.py")
-os.system("python continent.py")
+os.system("python mixdata.py")
 os.system("python date.py")
 os.system("python recovery.py")
 os.system("python date_format.py")

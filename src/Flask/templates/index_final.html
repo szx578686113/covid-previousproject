@@ -18,7 +18,7 @@
             background-image: linear-gradient(lightblue, #f1f1f1, #f1f1f1, #f1f1f1, white);
             padding: 10px;
             font-size: 40px;
-        {#position: relative;#} width: 100%;
+            width: 100%;
             height: 50px;
             text-align: center;
             z-index: 9999;
@@ -37,8 +37,7 @@
             display: flex;
             display: -webkit-flex;
             justify-content: center;
-        {#top: 100px;#} margin: 20px;
-        {#left: 5%;#}{#height: 90%;#}{#width: 94%;#}
+            margin: 20px;
         }
 
         .grid {
@@ -55,16 +54,15 @@
         }
 
         #c1 {
-        {#position: absolute;#} width: 75%;
+            width: 75%;
             height: 90%;
-        {#top: 5%;#}
         }
 
         #c2 {
-        {#position: absolute;#} display: flex;
+            display: flex;
             flex-direction: column;
-            margin: auto;
-        {#确保数字模块和地图模块中线对齐#} width: 20%;
+            margin: auto; /*确保数字模块和地图模块中线对齐*/
+             width: 20%;
             height: 80%;
         }
 
@@ -133,11 +131,11 @@
             width: 600px;
             height: 450px;
         }
-        .google-visualization-tooltip { pointer-events: none } {#避免图表中指针下的数据显示窗口闪烁#}
+        .google-visualization-tooltip { pointer-events: none } /*避免图表中指针下的数据显示窗口闪烁*/
     </style>
 </head>
 <body>
-<div id="title" class="header">Coronavirus Dashboard (外观细节待优化)</div>
+<div id="title" class="header">Coronavirus Dashboard</div>
 
 <div id="main">
     <div class="box" id="c1">
@@ -213,7 +211,7 @@
                 ]);
 
                 var options = {
-                    title: '标题还没想好',
+                    title: 'Total Trend',
                     fontName: 'Merriweather Sans',
                     legend: {
                         position: 'bottom'

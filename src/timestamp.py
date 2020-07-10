@@ -23,4 +23,4 @@ def setTimestamp(filepath, x):
     fp.write("{} {}".format(x,nowTime))
     fp.close()
 
-setTimestamp("timestamp.txt" ,getTimestamp("timestamp.txt") + 1)
+setTimestamp("../../timestamp.txt" ,getTimestamp("../../timestamp.txt") + 1)

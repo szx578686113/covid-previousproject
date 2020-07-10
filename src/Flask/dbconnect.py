@@ -6,7 +6,7 @@ def get_conn():
     # 创建连接
     conn = pymysql.connect(host="127.0.0.1",
                            user="root",
-                           password="",
+                           password="Keven123456",
                            db="covid",
                            charset="utf8mb4")
     # 创建游标
@@ -88,12 +88,18 @@ def get_continent():
     return res
 
 def get_total():
-    sql = "SELECT date, total_cases, total_deaths FROM covid.datedata t"
+    sql = "SELECT date, total_cases, total_deaths, total_recovery FROM covid.datedata t"
     res = query(sql)
     return res
 
 def get_age():
     sql = "SELECT t.* FROM covid.age t " \
           "ORDER BY id_num DESC"
+    res = query(sql)
+    return res
+
+def get_numbers():
+    sql = "SELECT * FROM datedata " \
+          "ORDER BY date DESC limit 1"
     res = query(sql)
     return res

@@ -11,3 +11,8 @@
 - MySQL 8.0
 - Spark 2.4
 - Flask
+
+## Demos
+仅供效果示意，非最新数据
+- demo.html
+- 成品效果图-COVID-19 Dashboard.pdf
